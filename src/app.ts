@@ -1,17 +1,15 @@
 import express from "express";
 import "dotenv/config";
 import path from "node:path";
-import { Strategy as LocalStrategy} from "passport-local";
 import type { Request, Response, NextFunction } from "express";
 import session from "express-session";
 import passport from "passport";
-import bcrypt from "bcrypt";
 import flash from "connect-flash";
-import { getUserFromUsername, getUserWithId } from "./db/user.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "../prisma/prisma.js"
 import indexRouter from "./routes/indexRouter.js";
 import userRouter from "./routes/userRouter.js";
+import passportConfig from "./config/passportConfig.js";
 
 const app = express();
 
@@ -32,42 +30,7 @@ app.use(session({
 app.use(passport.session());
 app.use(flash());
 
-passport.use(new LocalStrategy( async (username, password, done) =>  {
-    try {
-        const user = await getUserFromUsername(username);
-
-        if(!user) {
-            return done(null, false, {message: "Name or password is incorrect"});
-        }
-
-        const passwordCorrect = await bcrypt.compare(password, user.password);
-        if(!passwordCorrect) {
-            return done(null, false, {message: "Name or password is incorrect"});
-        }
-
-        return done(null, user);
-    } catch(error) {
-        done(error);
-    }
-}));
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id: number, done) => {
-  try {
-    const user = await getUserWithId(id);
-
-    if(!user) {
-        return done(null, false);
-    }
-
-    done(null, user);
-  } catch(err) {
-    done(err);
-  }
-});
+passportConfig();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.user = req.user;

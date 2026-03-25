@@ -13,5 +13,5 @@ export const postRegister = async (req: Request<{}, {}, {
     const {username, password} = req.body;
     const hashedPassword = await hash(password, 5);
     await addUser(username, hashedPassword);
-    res.render("index");
+    res.redirect("/");
 }
