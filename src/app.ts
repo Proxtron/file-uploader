@@ -7,10 +7,9 @@ import session from "express-session";
 import passport from "passport";
 import bcrypt from "bcrypt";
 import flash from "connect-flash";
-import pool from "./db/pool.js";
 import { getUserFromUsername, getUserWithId } from "./db/user.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { prisma, adapter } from "../prisma/prisma.js"
+import { prisma } from "../prisma/prisma.js"
 import indexRouter from "./routes/indexRouter.js";
 import userRouter from "./routes/userRouter.js";
 
