@@ -9,12 +9,12 @@ const passportConfig = () => {
             const user = await getUserFromUsername(username);
 
             if(!user) {
-                return done(null, false, {message: "Name or password is incorrect"});
+                return done(null, false, {message: "Username or password is incorrect"});
             }
 
             const passwordCorrect = await bcrypt.compare(password, user.password);
             if(!passwordCorrect) {
-                return done(null, false, {message: "Name or password is incorrect"});
+                return done(null, false, {message: "Username or password is incorrect"});
             }
 
             return done(null, user);

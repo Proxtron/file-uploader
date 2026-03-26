@@ -15,3 +15,8 @@ export const postRegister = async (req: Request<{}, {}, {
     await addUser(username, hashedPassword);
     res.redirect("/");
 }
+
+export const getSignIn = (req: Request, res: Response, next: NextFunction) => {
+    res.locals.flash = req.flash();
+    res.render("sign-in")
+}
