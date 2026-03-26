@@ -20,3 +20,10 @@ export const getSignIn = (req: Request, res: Response, next: NextFunction) => {
     res.locals.flash = req.flash();
     res.render("sign-in")
 }
+
+export const getSignOut = (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+        if(err) return next(err);
+        res.redirect("/");
+    });
+}
