@@ -10,6 +10,8 @@ import { prisma } from "../prisma/prisma.js"
 import indexRouter from "./routes/indexRouter.js";
 import userRouter from "./routes/userRouter.js";
 import passportConfig from "./config/passportConfig.js";
+import { checkAuthentication } from "./middleware/middleware.js";
+import fileRouter from "./routes/fileRouter.js";
 
 const app = express();
 
@@ -43,6 +45,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 //Routers
 app.use("/", indexRouter);
 app.use("/user", userRouter);
+app.use("/file", checkAuthentication, fileRouter);
 
 //Error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
