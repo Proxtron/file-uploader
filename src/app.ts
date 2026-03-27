@@ -45,7 +45,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 //Routers
 app.use("/", indexRouter);
 app.use("/user", userRouter);
-app.use("/file", checkAuthentication, fileRouter);
+app.use("/file", checkAuthentication(), fileRouter);
 
 //Error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
