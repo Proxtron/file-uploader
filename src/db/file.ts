@@ -8,3 +8,9 @@ export const addFile = async (originalFilename: string, filename: string, posted
     });
     return createdFile;
 }
+
+export const getFileById = async (fileId: number) => {
+    return await prisma.file.findUnique({
+        where: {id: fileId}
+    });
+}

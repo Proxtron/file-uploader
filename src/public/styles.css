@@ -23,3 +23,25 @@ nav {
 .form-row label {
     margin-right: 1rem;
 }
+
+.file-table {
+    border-collapse: collapse;
+}
+
+.file-table-heading {
+    background-color: #CCC;
+    padding: 0.5rem 1.5rem;
+}
+
+.file-table-cell {
+    padding: 0.5rem 1.5rem;
+    border:1px solid #CCC;
+}
+
+.file-table-row {
+    cursor: pointer;
+}
+
+.file-table-row:hover {
+    background-color: #F0F0F0;
+}

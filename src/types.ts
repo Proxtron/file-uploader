@@ -1,11 +1,9 @@
+import type { User as PrismaUser } from "../generated/prisma/client";
+
 export {};
 
 declare global {
     namespace Express {
-        interface User {
-            id: number
-            username: string,
-            password: string,
-        }
+        interface User extends PrismaUser {}
     }
 }

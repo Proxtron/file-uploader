@@ -10,7 +10,8 @@ export const getUserFromUsername = async (username: string) => {
 
 export const getUserWithId = async (user_id: number) => {
     return await prisma.user.findUnique({
-        where: {id: user_id}
+        where: {id: user_id},
+        include: {files: true}
     })
 }
 
