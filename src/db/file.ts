@@ -14,3 +14,9 @@ export const getFileById = async (fileId: number) => {
         where: {id: fileId}
     });
 }
+
+export const getFileByIdAndUser = async (fileId: number, userId: number) => {
+    return await prisma.file.findFirst({
+        where: {id: fileId, postedByUserId: userId}
+    });
+}
