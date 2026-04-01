@@ -37,6 +37,6 @@ export const getDownloadFile = async (req: Request<{fileId: string}>, res: Respo
         return res.status(404).send("File not found");
     }
 
-    const basePath = "src/public/uploads/";
+    const basePath = `src/public/uploads/${req.user!.id}/`;
     res.download(basePath + file.filename, file.originalFilename);
 }

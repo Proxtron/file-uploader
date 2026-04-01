@@ -1,14 +1,12 @@
 import { Router } from "express";
 import * as fileController from "../controllers/fileController.js";
-import multer from "multer";
-import path from "path";
 import { Meta, param } from "express-validator";
 import { getFileByIdAndUser } from "../db/file.js";
 import { validationResultMiddleware } from "../middleware/middleware.js";
+import { upload } from "../config/multerConfig.js";
 
 
 const fileRouter = Router();
-const upload = multer({dest: path.join(import.meta.dirname, "../public/uploads/")});
 
 const checkFileValidator = async (fileId: string, meta: Meta) => {
     const userId = meta.req.user.id as number;

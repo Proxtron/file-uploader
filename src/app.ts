@@ -12,6 +12,7 @@ import userRouter from "./routes/userRouter.js";
 import passportConfig from "./config/passportConfig.js";
 import { checkAuthentication } from "./middleware/middleware.js";
 import fileRouter from "./routes/fileRouter.js";
+// import folderRouter from "./routes/folderRouter.js";
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/", indexRouter);
 app.use("/user", userRouter);
 app.use("/file", checkAuthentication(), fileRouter);
+// app.use("/folder", checkAuthentication(), folderRouter);
 
 //Error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
