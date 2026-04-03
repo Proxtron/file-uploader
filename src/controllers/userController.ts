@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { addUser } from "../db/user";
 import { hash } from "bcrypt";
+import { createRootFolder } from "../db/folder";
 
 export const getRegister = (req: Request, res: Response, next: NextFunction) => {
     res.render("register");
@@ -12,7 +13,10 @@ export const postRegister = async (req: Request<{}, {}, {
 }>, res: Response, next: NextFunction) => {
     const {username, password} = req.body;
     const hashedPassword = await hash(password, 5);
-    await addUser(username, hashedPassword);
+    
+    const newUser = await addUser(username, hashedPassword);
+    await createRootFolder(newUser.id);
+    
     res.redirect("/");
 }
 
