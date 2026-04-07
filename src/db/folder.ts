@@ -8,3 +8,17 @@ export const createRootFolder = async (userId: number) => {
         }
     });
 }
+
+export const getRootFolderId = async (userId: number) => {
+    return await prisma.folder.findFirst({
+        select: {id: true},
+        where: {postedByUserId: userId, foldername: "root", childOfFolderId: null}
+    });
+}
+
+export const getChildrenOfFolder = async (folderId: number) => {
+    return await prisma.folder.findUnique({
+        where: {id: folderId},
+        include: {files: true, subFolders: true},
+    })
+}

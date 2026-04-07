@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= folderDetail.foldername %></title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include("components/header") %>
+    <h1><%= folderDetail.foldername %></h1>
+    <% if(folderDetail.subFolders.length == 0 && folderDetail.files.length == 0) { %>
+        No files found.
+    <% } %>
+
+    <table class="file-table">
+        <thead class="file-table-heading">
+            <tr>
+                <th class="file-table-cell">Type</th>
+                <th class="file-table-cell">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(const folder of folderDetail.subFolders) { %>
+                <tr class="file-table-row">
+                    <td class="file-table-cell">Folder</td>
+                    <td class="file-table-cell"><%= folder.foldername %></td>
+                </tr>
+            <% } %>
+
+            <% for(const file of folderDetail.files) { %>
+                <tr class="file-table-row">
+                    <td class="file-table-cell">File</td>
+                    <td class="file-table-cell"><%= file.filename %></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>

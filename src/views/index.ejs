@@ -12,23 +12,7 @@
 
     <% if(locals.user) { %>
         <p>Welcome, <%= user.username %></p>
-        <% if(user.files && user.files.length > 0) { %>
-            <h2>Uploaded Files</h2>
-            <table class="file-table">
-                <thead>
-                    <th class="file-table-heading">Filename</th>
-                </thead>
-                <tbody>
-                    <% for(const file of user.files) { %>
-                        <tr class="file-table-row" onclick="window.location='/file/view/<%- file.id %>'">
-                            <td class="file-table-cell"><%= file.originalFilename %></td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        <% } else { %>
-            <p>You have not uploaded any files yet.</p>
-        <% } %>
+        <p><a href="/folder/">Click here</a> to access your file system</p>
     <% } else { %>
         <p>You must log in to access your file system.</p>
     <% } %>
