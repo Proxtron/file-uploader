@@ -36,10 +36,11 @@ app.use(flash());
 passportConfig();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+    //For views to determine log in status
     res.locals.user = req.user;
-    console.clear();
-    console.log(req.user);
-    console.log(req.session);
+
+    //Logging
+    
     next();
 });
 

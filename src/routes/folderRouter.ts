@@ -11,9 +11,10 @@ const folderRouter = Router();
 
 folderRouter.get("/", folderController.getRootFolderChildren);
 
-folderRouter.get("/list-children/:folderId", 
-    param("folderId").isInt().withMessage("fileId must be an integer (/folder/list-children/:folderId)"),
-    // param("fileId").custom(checkFileValidator).withMessage("File not found or not accessible"),
+folderRouter.get("/list/:folderId", 
+    param("folderId").isInt().withMessage("folderId must be an integer (/folder/list/:folderId)"),
+    validationResultMiddleware("error"),
     folderController.getFolderChildren
 );
+
 export default folderRouter;

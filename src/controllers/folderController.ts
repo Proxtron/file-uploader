@@ -7,7 +7,7 @@ export const getRootFolderChildren = async (req: Request, res: Response, next: N
     if(!rootFolder) throw new Error("This user does not have a root folder");
     const rootFolderId = rootFolder.id;
 
-    const folderDetail = await getChildrenOfFolder(rootFolderId);
+    const folderDetail = await getChildrenOfFolder(rootFolderId, userId);
 
     if(!folderDetail) {
         throw new Error("Can't find children of this folder");
@@ -17,14 +17,14 @@ export const getRootFolderChildren = async (req: Request, res: Response, next: N
 }
 
 export const getFolderChildren = async (req: Request<{folderId: string}>, res: Response, next: NextFunction) => {
-    const folderId = parseInt(req.body.folderId);
-    const folderDetail = await getChildrenOfFolder(folderId);
+    const folderId = parseInt(req.params.folderId);
+    const userId = req.user!.id;
+
+    const folderDetail = await getChildrenOfFolder(folderId, userId);
 
     if(!folderDetail) {
-        throw new Error();
+        throw new Error("Can't find children of this folder");
     }
 
-    const subFolders = folderDetail.subFolders;
-    const files = folderDetail.files;
-
+    res.render("folder-detail", {folderDetail});
 }

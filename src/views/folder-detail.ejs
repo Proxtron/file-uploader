@@ -21,10 +21,17 @@
             </tr>
         </thead>
         <tbody>
-            <% for(const folder of folderDetail.subFolders) { %>
-                <tr class="file-table-row">
+            <% if(folderDetail.childOfFolderId) { %>
+                <tr class="file-table-row" onclick="location.href='/folder/list/<%- folderDetail.childOfFolderId %>'">
                     <td class="file-table-cell">Folder</td>
-                    <td class="file-table-cell"><%= folder.foldername %></td>
+                    <td class="file-table-cell">../</td>
+                </tr>
+            <% } %>
+
+            <% for(const folder of folderDetail.subFolders) { %>
+                <tr class="file-table-row" onclick="location.href='/folder/list/<%- folder.id %>'">
+                    <td class="file-table-cell">Folder</td>
+                    <td class="file-table-cell"><%= folder.foldername %>/</td>
                 </tr>
             <% } %>
 

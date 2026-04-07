@@ -16,9 +16,9 @@ export const getRootFolderId = async (userId: number) => {
     });
 }
 
-export const getChildrenOfFolder = async (folderId: number) => {
+export const getChildrenOfFolder = async (folderId: number, userId: number) => {
     return await prisma.folder.findUnique({
-        where: {id: folderId},
+        where: {id: folderId, postedByUserId: userId},
         include: {files: true, subFolders: true},
     })
 }
