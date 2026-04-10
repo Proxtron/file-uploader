@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Folder</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include("components/header") %>
+    <h1>Create Folder</h1>
+    <form action="/folder/create" method="POST">
+        <div class="form-row">
+            <label for="folder">Folder Name</label>
+            <input type="text" id="folder" name="foldername" required>
+        </div>
+
+        <input type="number" name="childOfFolderId" value="<%- childOfFolderId %>" hidden>
+        <button type="submit">Add Folder</button>
+    </form>
+</body>
+</html>
