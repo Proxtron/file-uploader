@@ -23,6 +23,13 @@ export const getChildrenOfFolder = async (folderId: number, userId: number) => {
     })
 }
 
+export const getChildrenOfFolderWithoutUser = async (folderId: number) => {
+    return await prisma.folder.findUnique({
+        where: {id: folderId},
+        include: {files: true, subFolders: true},
+    });
+}
+
 export const insertFolder = async (foldername: string, childOfFolderId: number, postedByUserId: number) => {
     return await prisma.folder.create({
         data: {foldername, childOfFolderId, postedByUserId}

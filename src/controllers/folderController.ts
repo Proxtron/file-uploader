@@ -38,7 +38,6 @@ export const createFolder = async (req: Request<{}, {}, {
     const postedByUserId = req.user!.id;
 
     await insertFolder(foldername, childOfFolderId, postedByUserId);
-
     res.redirect(`/folder/list/${childOfFolderId}`);
 }
 
