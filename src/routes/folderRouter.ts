@@ -47,4 +47,10 @@ folderRouter.post("/create",
     folderController.createFolder
 );
 
+folderRouter.get("/delete/:folderId",
+    param("folderId").isInt().withMessage("folderId must be an integer (/folder/delete/:folderId"),
+    validationResultMiddleware("error"),
+    folderController.deleteFolder
+)
+
 export default folderRouter;

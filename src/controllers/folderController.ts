@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { getChildrenOfFolder, getRootFolderId, insertFolder } from "../db/folder";
+import { getChildrenOfFolder, getRootFolderId, insertFolder, deleteFolder as deleteFolderDB } from "../db/folder";
 
 export const getRootFolderChildren = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user!.id;
@@ -45,4 +45,12 @@ export const createFolderForm = async (req: Request<{childOfFolderId: string}>, 
     const childOfFolderId = parseInt(req.params.childOfFolderId);
 
     res.render("create-folder", {childOfFolderId});
+}
+
+export const deleteFolder = async (req: Request<{folderId: string}>, res: Response, next: NextFunction) => {
+    const folderId = parseInt(req.params.folderId);
+    const postedByUserId = req.user!.id;
+
+    const deletedFolder = await deleteFolderDB(folderId, postedByUserId)
+    res.redirect(`/folder/list/${deletedFolder.childOfFolderId}`);
 }
