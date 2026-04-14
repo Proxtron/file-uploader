@@ -19,6 +19,7 @@
                 <th class="file-table-cell">Type</th>
                 <th class="file-table-cell">Name</th>
                 <th class="file-table-cell"></th>
+                <th class="file-table-cell"></th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@
                 <tr class="file-table-row" onclick="location.href='/folder/list/<%- folderDetail.childOfFolderId %>'">
                     <td class="file-table-cell">Folder</td>
                     <td class="file-table-cell">../</td>
+                    <td class="file-table-cell"></td>
                     <td class="file-table-cell"></td>
                 </tr>
             <% } %>
@@ -37,6 +39,9 @@
                     <td class="file-table-cell">
                         <a href="/folder/delete/<%- folder.id %>">Delete</a>
                     </td>
+                    <td class="file-table-cell">
+                        <a href="/folder/update/<%- folder.id %>">Update</a>
+                    </td>
                 </tr>
             <% } %>
 
@@ -44,6 +49,7 @@
                 <tr class="file-table-row">
                     <td class="file-table-cell">File</td>
                     <td class="file-table-cell"><%= file.filename %></td>
+                    <td class="file-table-cell"></td>
                     <td class="file-table-cell"></td>
                 </tr>
             <% } %>

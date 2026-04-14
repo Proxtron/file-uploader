@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Folder</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include("components/header") %>
+    <%- include("components/error-list") %>
+    <h1>Update Folder</h1>
+    <form action="/folder/update" method="POST">
+        <div class="form-row">
+            <label for="newFolderName">Folder Name</label>
+            <input type="text" id="newFolderName" name="newFolderName" value="<%- foldername %>" required>
+        </div>
+
+        <input type="number" name="folderId" value="<%- folderId %>" hidden>
+        <button type="submit">Add Folder</button>
+    </form>
+</body>
+</html>

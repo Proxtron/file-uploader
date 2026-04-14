@@ -60,4 +60,11 @@ folderRouter.post("/update",
     folderController.postUpdateFolder
 )
 
+folderRouter.get("/update/:folderId",
+    param("folderId").isInt().withMessage("folderId must be an integer (/folder/update/:folderId"),
+    validationResultMiddleware("error"),
+    folderController.getUpdateFolder
+)
+
+
 export default folderRouter;
