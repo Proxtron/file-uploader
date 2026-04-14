@@ -33,7 +33,7 @@ model File {
   uploadedAt DateTime @default(now())
   size Int 
 
-  childOfFolder Folder @relation(fields: [childOfFolderId], references: [id])
+  childOfFolder Folder @relation(fields: [childOfFolderId], onDelete: Cascade, references: [id])
   childOfFolderId Int
 
   @@unique([originalFilename, childOfFolderId])
@@ -45,7 +45,7 @@ model Folder {
 
   files File[]
 
-  childOfFolder Folder? @relation("FolderToFolder", fields: [childOfFolderId], references: [id])
+  childOfFolder Folder? @relation("FolderToFolder", fields: [childOfFolderId], onDelete: Cascade, references: [id])
   childOfFolderId Int?
   subFolders Folder[] @relation("FolderToFolder")
 

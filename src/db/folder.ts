@@ -41,3 +41,10 @@ export const deleteFolder = async (folderId: number, userId: number) => {
         where: {id: folderId, postedByUserId: userId}
     })
 }
+
+export const updateFolder = async (newFolderName: string, folderId: number, postedByUserId: number) => {
+    return await prisma.folder.update({
+        data: {foldername: newFolderName},
+        where: {id: folderId, postedByUserId: postedByUserId}
+    })
+}

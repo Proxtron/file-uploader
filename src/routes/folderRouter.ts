@@ -53,4 +53,11 @@ folderRouter.get("/delete/:folderId",
     folderController.deleteFolder
 )
 
+folderRouter.post("/update",
+    body("folderId").isInt().withMessage("folderId must be an integer"),
+    body("newFolderName").trim().notEmpty().withMessage("newFolderName is required"),
+    validationResultMiddleware("error"),
+    folderController.postUpdateFolder
+)
+
 export default folderRouter;
