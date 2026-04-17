@@ -1,6 +1,6 @@
-import { Router } from "express";
+import { NextFunction, Router, Request, Response, } from "express";
 import * as fileController from "../controllers/fileController.js";
-import { Meta, param } from "express-validator";
+import { Meta, param, body } from "express-validator";
 import { getFileByIdAndUser } from "../db/file.js";
 import { validationResultMiddleware } from "../middleware/middleware.js";
 import { upload } from "../config/multerConfig.js";
@@ -15,9 +15,15 @@ const checkFileValidator = async (fileId: string, meta: Meta) => {
     if(!file) throw new Error("File not found or not accessible")
 }
 
-fileRouter.get("/add-file", fileController.getAddFile)
+fileRouter.get("/add-file/:parentFolderId", 
+    param("parentFolderId").isInt().withMessage("parentFolderId must be an integer (/file/add-file/:parentFolderId"),
+    fileController.getAddFile
+);
+
 fileRouter.post("/add-file", 
     upload.single("file"), 
+    body("parentFolderId").isInt().withMessage("parentFolderId must be present and an integer"),
+    validationResultMiddleware("error"),
     fileController.postAddFile
 );
 

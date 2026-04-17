@@ -2,22 +2,19 @@ import { Request, Response, NextFunction } from "express"
 import { addFile, getFileById } from "../db/file";
 
 
-export const getAddFile = (req: Request, res: Response, next: NextFunction) => {
-    res.render("add-file");
+export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
+    const parentFolderId = parseInt(req.params.parentFolderId);
+    res.render("add-file", {parentFolderId});
 }
 
-export const postAddFile = async (req: Request, res: Response, next: NextFunction) => {
-    if(!req.user) {
-        throw new Error("No user found when adding file record to the database");
-    }
-
+export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>, res: Response, next: NextFunction) => {
     if(!req.file) {
-        throw new Error("No file found when attemping to add file record to the database");
+        throw new Error("No uploaded file found when attemping to add file record to the database");
     }
 
-    const postedByUserId = req.user.id;
-    const {originalname, filename, size } = req.file
-    await addFile(originalname, filename, postedByUserId, size);
+    const parentFolderId = parseInt(req.body.parentFolderId);
+    const {originalname, filename, size } = req.file;
+    await addFile(originalname, filename, parentFolderId, size);
     res.redirect("/");
 }
 

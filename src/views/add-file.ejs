@@ -10,6 +10,8 @@
     <%- include("components/header") %>
     <h1>Add File</h1>
     <form action="/file/add-file" method="POST" enctype="multipart/form-data">
+        <input type="number" id="parentFolderId" name="parentFolderId" 
+            value="<%- parentFolderId %>" required hidden>
         <div class="form-row">
             <label for="file">File</label>
             <input type="file" id="file" name="file" required>
