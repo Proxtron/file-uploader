@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
         const finalResolvedPath = `${basePath}/${userId}/${folderPath}`;
 
-        fs.mkdirSync(finalResolvedPath);
+        fs.mkdirSync(finalResolvedPath, {recursive: true});
         return cb(null, finalResolvedPath);
     }
 });

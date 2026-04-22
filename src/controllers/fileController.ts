@@ -15,7 +15,7 @@ export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>
     const parentFolderId = parseInt(req.body.parentFolderId);
     const {originalname, filename, size } = req.file;
     await addFile(originalname, filename, parentFolderId, size);
-    res.redirect("/");
+    res.redirect(`/folder/list/${parentFolderId}`);
 }
 
 export const getViewFile = async (req: Request<{fileId: string}>, res: Response, next: NextFunction) => {
