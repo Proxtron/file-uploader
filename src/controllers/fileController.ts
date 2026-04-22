@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import { addFile, getFileById } from "../db/file";
-import { getChildrenOfFolderWithoutUser } from "../db/folder";
-import path from "node:path";
+import { getPath } from "../utils/fileSystem";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -34,33 +33,6 @@ export const getDownloadFile = async (
     next: NextFunction
 ) => {
     const fileId = parseInt(req.params.fileId);
-    const file = await getFileById(fileId);
-
-    if(!file) {
-        throw new Error("No file found");
-    }
-
-    const parentFolderId = parseInt(req.params.parentFolderId);
-    const basePath = path.join(import.meta.dirname, "../public/uploads/");
-    //The path of the folder belonging to "parentFolderId" in the filesystem
-    let folderPath = "";
-    let currentFolderId: number | null = parentFolderId;
-
-    while(currentFolderId !== null) {
-        let folderDetail = await getChildrenOfFolderWithoutUser(currentFolderId);
-        if(!folderDetail) {
-            throw new Error("No folder found");
-        }
-
-        if(folderDetail.childOfFolderId != null) {
-            //Next highest folder level
-            folderPath = `${folderDetail.foldername}/${folderPath}`
-        } 
-
-        currentFolderId = folderDetail.childOfFolderId
-    }
-
-    const userId = req.user!.id;
-    const finalResolvedPath = `${basePath}/${userId}/${folderPath}/`;
-    res.download(finalResolvedPath + file.filename, file.originalFilename);
+    const {finalResolvedPath, originalFilename} = await getPath(fileId, req.user!.id);
+    res.download(finalResolvedPath, originalFilename);
 }
