@@ -1,16 +1,14 @@
 import { NextFunction, Router, Request, Response, } from "express";
 import * as fileController from "../controllers/fileController.js";
 import { Meta, param, body } from "express-validator";
-import { getFileByIdAndUser } from "../db/file.js";
+import { getFileById } from "../db/file.js";
 import { validationResultMiddleware } from "../middleware/middleware.js";
 import { upload } from "../config/multerConfig.js";
-
 
 const fileRouter = Router();
 
 const checkFileValidator = async (fileId: string, meta: Meta) => {
-    const userId = meta.req.user.id as number;
-    const file = await getFileByIdAndUser(parseInt(fileId), userId);
+    const file = await getFileById(parseInt(fileId));
     console.log(file);
     if(!file) throw new Error("File not found or not accessible")
 }
@@ -34,9 +32,10 @@ fileRouter.get("/view/:fileId",
     fileController.getViewFile
 );
 
-fileRouter.get("/download/:fileId",
-    param("fileId").isInt().withMessage("fileId must be an integer (/file/download/:fileId)"),
+fileRouter.get("/download/:fileId/:parentFolderId",
+    param("fileId").isInt().withMessage("fileId must be an integer (/file/download/:fileId/:parentFolderId)"),
     param("fileId").custom(checkFileValidator).withMessage("File not found or not accessible"),
+    param("parentFolderId").isInt().withMessage("parentFolderId must be an integer (/file/download/:fileId/:parentFolderId)"),
     validationResultMiddleware("error"),
     fileController.getDownloadFile
 )

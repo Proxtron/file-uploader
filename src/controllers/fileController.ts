@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { addFile, getFileById } from "../db/file";
-
+import { getChildrenOfFolderWithoutUser } from "../db/folder";
+import path from "node:path";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -27,13 +28,39 @@ export const getViewFile = async (req: Request<{fileId: string}>, res: Response,
     res.render("file-detail", {file});
 }
 
-export const getDownloadFile = async (req: Request<{fileId: string}>, res: Response, next: NextFunction) => {
+export const getDownloadFile = async (
+    req: Request<{fileId: string, parentFolderId: string}>, 
+    res: Response, 
+    next: NextFunction
+) => {
     const fileId = parseInt(req.params.fileId);
     const file = await getFileById(fileId);
+
     if(!file) {
-        return res.status(404).send("File not found");
+        throw new Error("No file found");
     }
 
-    const basePath = `src/public/uploads/${req.user!.id}/`;
-    res.download(basePath + file.filename, file.originalFilename);
+    const parentFolderId = parseInt(req.params.parentFolderId);
+    const basePath = path.join(import.meta.dirname, "../public/uploads/");
+    //The path of the folder belonging to "parentFolderId" in the filesystem
+    let folderPath = "";
+    let currentFolderId: number | null = parentFolderId;
+
+    while(currentFolderId !== null) {
+        let folderDetail = await getChildrenOfFolderWithoutUser(currentFolderId);
+        if(!folderDetail) {
+            throw new Error("No folder found");
+        }
+
+        if(folderDetail.childOfFolderId != null) {
+            //Next highest folder level
+            folderPath = `${folderDetail.foldername}/${folderPath}`
+        } 
+
+        currentFolderId = folderDetail.childOfFolderId
+    }
+
+    const userId = req.user!.id;
+    const finalResolvedPath = `${basePath}/${userId}/${folderPath}/`;
+    res.download(finalResolvedPath + file.filename, file.originalFilename);
 }

@@ -13,7 +13,7 @@
         <li>Size: <%= file.size %> bytes</li>
         <li>Uploaded at: <%= file.uploadedAt %></li>
         <li>
-            <a href="/file/download/<%= file.id %>">
+            <a href="/file/download/<%= file.id %>/<%- file.childOfFolderId %>">
                 <button>Download</button>
             </a>
         </li>
