@@ -14,3 +14,9 @@ export const getFileById = async (fileId: number) => {
         where: {id: fileId}
     });
 }
+
+export const deleteFile = async (fileId: number) => {
+    return await prisma.file.delete({
+        where: {id: fileId}
+    })
+}

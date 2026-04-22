@@ -49,7 +49,9 @@
                 <tr class="file-table-row" onclick="location.href='/file/view/<%- file.id %>'">
                     <td class="file-table-cell">File</td>
                     <td class="file-table-cell"><%= file.originalFilename %></td>
-                    <td class="file-table-cell"></td>
+                    <td class="file-table-cell">
+                        <a href="/file/delete/<%- file.id %>">Delete</a>
+                    </td>
                     <td class="file-table-cell"></td>
                 </tr>
             <% } %>

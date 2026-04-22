@@ -40,4 +40,9 @@ fileRouter.get("/download/:fileId/:parentFolderId",
     fileController.getDownloadFile
 )
 
+fileRouter.get("/delete/:fileId",
+    param("fileId").isInt().withMessage("fileId must be an integer (/file/delete/:fileId"),
+    validationResultMiddleware("error"),
+    fileController.getDeleteFile
+)
 export default fileRouter;

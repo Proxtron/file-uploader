@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { addFile, getFileById } from "../db/file";
+import { addFile, deleteFile, getFileById } from "../db/file";
 import { getPath } from "../utils/fileSystem";
+import { deleteFile as deleteFileFromFS } from "../utils/fileSystem";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -35,4 +36,17 @@ export const getDownloadFile = async (
     const fileId = parseInt(req.params.fileId);
     const {finalResolvedPath, originalFilename} = await getPath(fileId, req.user!.id);
     res.download(finalResolvedPath, originalFilename);
+}
+
+export const getDeleteFile = async (
+    req: Request<{fileId: string}>, 
+    res: Response, 
+    next: NextFunction
+) => {
+    const fileId = parseInt(req.params.fileId);
+
+    await deleteFileFromFS(fileId, req.user!.id);
+    const deletedFile = await deleteFile(fileId);
+
+    res.redirect(`/folder/list/${deletedFile.childOfFolderId}`);
 }
