@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { addFile, deleteFile, getFileById } from "../db/file";
 import { getPath } from "../utils/fileSystem";
 import { deleteFile as deleteFileFromFS } from "../utils/fileSystem";
+import supabase from "../config/supabaseConfig";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -14,8 +15,13 @@ export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>
     }
 
     const parentFolderId = parseInt(req.body.parentFolderId);
-    const {originalname, filename, size } = req.file;
-    await addFile(originalname, filename, parentFolderId, size);
+    const {originalname, size, buffer } = req.file;
+
+    const addedFile = await addFile(originalname, originalname, parentFolderId, size);
+    const { finalResolvedPath } = await getPath(addedFile.id, req.user!.id);
+    await supabase.storage.from("files").upload(finalResolvedPath, buffer);
+
+
     res.redirect(`/folder/list/${parentFolderId}`);
 }
 

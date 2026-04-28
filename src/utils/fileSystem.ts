@@ -1,6 +1,5 @@
 import { getFileById } from "../db/file";
 import { getChildrenOfFolderWithoutUser } from "../db/folder";
-import path from "node:path";
 import fs from "fs";
 
 export const getPath = async (fileId: number, userId: number) => {
@@ -27,12 +26,10 @@ export const getPath = async (fileId: number, userId: number) => {
         currentFolderId = folderDetail.childOfFolderId
     }
 
-    const basePath = path.join(import.meta.dirname, "../public/uploads/");
     const filename = file.filename
-    const originalFilename = file.originalFilename;
-    const finalResolvedPath = `${basePath}/${userId}/${folderPath}/${filename}`;
+    const finalResolvedPath = `/${userId}/${folderPath}/${filename}`;
 
-    return {finalResolvedPath, originalFilename};
+    return {finalResolvedPath, filename};
 }
 
 export const deleteFile = async (fileId: number, userId: number) => {

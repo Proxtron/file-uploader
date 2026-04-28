@@ -28,7 +28,6 @@ model User {
 
 model File {
   id Int @id @default(autoincrement())
-  originalFilename String
   filename String
   uploadedAt DateTime @default(now())
   size Int 
@@ -36,7 +35,7 @@ model File {
   childOfFolder Folder @relation(fields: [childOfFolderId], onDelete: Cascade, references: [id])
   childOfFolderId Int
 
-  @@unique([originalFilename, childOfFolderId])
+  @@unique([filename, childOfFolderId])
 }
 
 model Folder {
