@@ -48,7 +48,7 @@
             <% for(const file of folderDetail.files) { %>
                 <tr class="file-table-row" onclick="location.href='/file/view/<%- file.id %>'">
                     <td class="file-table-cell">File</td>
-                    <td class="file-table-cell"><%= file.originalFilename %></td>
+                    <td class="file-table-cell"><%= file.filename %></td>
                     <td class="file-table-cell">
                         <a href="/file/delete/<%- file.id %>">Delete</a>
                     </td>

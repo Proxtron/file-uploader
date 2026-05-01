@@ -27,12 +27,13 @@ export const getPath = async (fileId: number, userId: number) => {
     }
 
     const filename = file.filename
-    const finalResolvedPath = `/${userId}/${folderPath}/${filename}`;
+
+    let finalResolvedPath;
+    if(folderPath) {
+        finalResolvedPath = `${userId}/${folderPath}/${filename}`;
+    } else {
+        finalResolvedPath = `${userId}/${filename}`
+    }
 
     return {finalResolvedPath, filename};
-}
-
-export const deleteFile = async (fileId: number, userId: number) => {
-    const { finalResolvedPath } = await getPath(fileId, userId);
-    fs.rmSync(finalResolvedPath)
 }
