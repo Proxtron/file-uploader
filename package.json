@@ -16,10 +16,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx --watch --env-file=.env src/app.ts",
-    "build": "tsc && copyfiles -u 1 \"src/views/**/*\" \"src/public/**/*\" dist",
+    "build": "prisma generate && tsc && copyfiles -u 1 \"src/views/**/*\" \"src/public/**/*\" dist",
     "clean": "rm -rf dist",
     "start": "node ./dist/app.js",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
