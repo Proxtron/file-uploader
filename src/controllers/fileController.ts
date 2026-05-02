@@ -4,6 +4,8 @@ import supabase from "../config/supabaseConfig";
 import { randomUUID } from "crypto";
 import { AppError } from "../error/error";
 
+const MAX_FILE_SIZE = 10 * 1000 * 1000; // 10MB
+
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
     res.render("add-file", {parentFolderId});
@@ -16,6 +18,10 @@ export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>
 
     const parentFolderId = parseInt(req.body.parentFolderId);
     const {originalname, size, buffer } = req.file;
+
+    if(size > MAX_FILE_SIZE) {
+        throw new AppError("File must be under 10MB");
+    }
 
     //Upload file to supabase storage
     const ext = originalname.split(".").pop();
