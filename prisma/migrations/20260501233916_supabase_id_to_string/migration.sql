@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "File" ALTER COLUMN "supabaseId" SET DEFAULT '',
+ALTER COLUMN "supabaseId" SET DATA TYPE TEXT;

@@ -1,8 +1,8 @@
 import { prisma } from "../../prisma/prisma";
 
-export const addFile = async (filename: string, childOfFolderId: number, size: number) => {
+export const addFile = async (filename: string, childOfFolderId: number, size: number, supabasePath: string) => {
     const createdFile = await prisma.file.create({
-        data: {filename, size, childOfFolderId}
+        data: {filename, size, childOfFolderId, supabasePath}
     });
     return createdFile;
 }

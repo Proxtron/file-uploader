@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import { addFile, deleteFile, getFileById } from "../db/file";
-import { getPath } from "../utils/fileSystem";
 import supabase from "../config/supabaseConfig";
+import { randomUUID } from "crypto";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -16,15 +16,15 @@ export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>
     const parentFolderId = parseInt(req.body.parentFolderId);
     const {originalname, size, buffer } = req.file;
 
-    //Insert operation(DB)
-    const addedFile = await addFile(originalname, parentFolderId, size);
-
-    //Get the path of the file added to the db
-    const { finalResolvedPath } = await getPath(addedFile.id, req.user!.id);
-
     //Upload file to supabase storage
-    await supabase.storage.from("files").upload(finalResolvedPath, buffer);
+    const ext = originalname.split(".").pop();
+    const uniquePath = `${randomUUID()}.${ext}`;
 
+    const { data, error } = await supabase.storage.from("files").upload(uniquePath, buffer);
+    if(error) throw error;
+    
+    //Insert operation(DB)
+    await addFile(originalname, parentFolderId, size, data.path);
     res.redirect(`/folder/list/${parentFolderId}`);
 }
 
@@ -43,13 +43,15 @@ export const getDownloadFile = async (
     next: NextFunction
 ) => {
     const fileId = parseInt(req.params.fileId);
-    const {finalResolvedPath, filename} = await getPath(fileId, req.user!.id);
+    const file = await getFileById(fileId);
 
-    const {data, error} = await supabase.storage.from("files").download(finalResolvedPath);
+    if(!file) throw new Error("File not found");
+
+    const {data, error} = await supabase.storage.from("files").download(file.supabasePath);
     if(error || !data) throw error ?? new Error("File not found in storage");
 
     const buffer = Buffer.from(await data.arrayBuffer());
-    res.setHeader("Content-Disposition", `attachment; filename=${filename}`);
+    res.setHeader("Content-Disposition", `attachment; filename=${file.filename}`);
     res.setHeader("Content-Type", data.type);
     res.send(buffer);
 }
@@ -60,13 +62,12 @@ export const getDeleteFile = async (
     next: NextFunction
 ) => {
     const fileId = parseInt(req.params.fileId);
-    const { finalResolvedPath } = await getPath(fileId, req.user!.id)
 
     //Delete operation (DB)
     const deletedFile = await deleteFile(fileId);
 
     //Delete operation (Supabase storage)
-    const {data, error} = await supabase.storage.from("files").remove([finalResolvedPath]);
+    const {data, error} = await supabase.storage.from("files").remove([deletedFile.supabasePath]);
     if(error) throw error;
 
     res.redirect(`/folder/list/${deletedFile.childOfFolderId}`);
