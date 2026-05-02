@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as userController from "../controllers/userController.js";
 import { body } from "express-validator";
-import { validationResultMiddleware } from "../middleware/middleware.js";
+import { validateForm } from "../middleware/middleware.js";
 import { getUserFromUsername } from "../db/user.js";
 import passport from "passport";
 
@@ -16,7 +16,7 @@ userRouter.post("/register",
         const user = await getUserFromUsername(username)
         return user;
     }).withMessage("User with username already exists"),
-    validationResultMiddleware("register"),
+    validateForm,
     userController.postRegister
 );
 

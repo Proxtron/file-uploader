@@ -13,6 +13,7 @@ import passportConfig from "./config/passportConfig.js";
 import { checkAuthentication } from "./middleware/middleware.js";
 import fileRouter from "./routes/fileRouter.js";
 import folderRouter from "./routes/folderRouter.js";
+import { AppError } from "./error/error.js";
 
 const app = express();
 
@@ -36,11 +37,8 @@ app.use(flash());
 passportConfig();
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    //For views to determine log in status
     res.locals.user = req.user;
-
-    //Logging
-    
+    res.locals.errors = req.flash("errors");
     next();
 });
 
@@ -52,6 +50,9 @@ app.use("/folder", checkAuthentication(), folderRouter);
 
 //Error handler
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if(err instanceof AppError) {
+        return res.status(err.statusCode).render("error", {message: err.message});
+    }
     console.error(err);
     res.status(500).render("error", {message: "Something went wrong"});
 });

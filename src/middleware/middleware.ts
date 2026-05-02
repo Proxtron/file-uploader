@@ -11,20 +11,22 @@ export const checkAuthentication = (redirectRoute: string = "/user/sign-in") => 
     }
 }
 
+export const validateForm = (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array().map(e => e.msg);
+    if (errors.length > 0) {                                                                                                         
+        req.flash("errors", errors);
+        return res.redirect("back");                                                                                                 
+    }           
+    next();
+}
+
 export const validationResultMiddleware = (
     view: string = "error", 
-    viewContext: object | ((req: Request) => object) = {}
 ) => {
     return (req: Request, res: Response, next: NextFunction) => {
         const errors = validationResult(req).array().map((error) => error.msg);
         if(errors.length > 0) {
-            const ctx = typeof viewContext === "function" ? viewContext(req) : viewContext;
-
-            if(view === "error") {
-                return res.status(400).render(view, {message: errors[0]});
-            } else {
-                return res.status(400).render(view, {errors, ...ctx});
-            }
+            return res.status(400).render(view, {message: errors[0]});
         } else {
             next();
         }

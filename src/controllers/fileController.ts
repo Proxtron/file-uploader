@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express"
 import { addFile, deleteFile, getFileById } from "../db/file";
 import supabase from "../config/supabaseConfig";
 import { randomUUID } from "crypto";
+import { AppError } from "../error/error";
 
 export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response, next: NextFunction) => {
     const parentFolderId = parseInt(req.params.parentFolderId);
@@ -10,7 +11,7 @@ export const getAddFile = (req: Request<{parentFolderId: string}>, res: Response
 
 export const postAddFile = async (req: Request<{}, {}, {parentFolderId: string}>, res: Response, next: NextFunction) => {
     if(!req.file) {
-        throw new Error("No uploaded file found when attemping to add file record to the database");
+        throw new AppError("No uploaded file found when attemping to add file record to the database");
     }
 
     const parentFolderId = parseInt(req.body.parentFolderId);
@@ -45,10 +46,10 @@ export const getDownloadFile = async (
     const fileId = parseInt(req.params.fileId);
     const file = await getFileById(fileId);
 
-    if(!file) throw new Error("File not found");
+    if(!file) throw new AppError("File not found");
 
     const {data, error} = await supabase.storage.from("files").download(file.supabasePath);
-    if(error || !data) throw error ?? new Error("File not found in storage");
+    if(error || !data) throw error ?? new AppError("File not found in storage");
 
     const buffer = Buffer.from(await data.arrayBuffer());
     res.setHeader("Content-Disposition", `attachment; filename=${file.filename}`);

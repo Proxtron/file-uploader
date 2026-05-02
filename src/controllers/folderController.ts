@@ -1,17 +1,18 @@
 import { Request, Response, NextFunction } from "express"
 import { getChildrenOfFolder, getRootFolderId, insertFolder, deleteFolder as deleteFolderDB, updateFolder, getChildrenOfFolderWithoutUser } from "../db/folder";
 import supabase from "../config/supabaseConfig";
+import { AppError } from "../error/error";
 
 export const getRootFolderChildren = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user!.id;
     const rootFolder = await getRootFolderId(userId);
-    if(!rootFolder) throw new Error("This user does not have a root folder");
+    if(!rootFolder) throw new AppError("This user does not have a root folder");
     const rootFolderId = rootFolder.id;
 
     const folderDetail = await getChildrenOfFolder(rootFolderId, userId);
 
     if(!folderDetail) {
-        throw new Error("Can't find children of this folder");
+        throw new AppError("Can't find children of this folder");
     }
 
     res.render("folder-detail", {folderDetail});
@@ -24,7 +25,7 @@ export const getFolderChildren = async (req: Request<{folderId: string}>, res: R
     const folderDetail = await getChildrenOfFolder(folderId, userId);
 
     if(!folderDetail) {
-        throw new Error("Can't find children of this folder");
+        throw new AppError("Can't find children of this folder");
     }
 
     res.render("folder-detail", {folderDetail});

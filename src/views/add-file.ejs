@@ -9,6 +9,7 @@
 <body>
     <%- include("components/header") %>
     <h1>Add File</h1>
+    <%- include("components/error-list") %>
     <form action="/file/add-file" method="POST" enctype="multipart/form-data">
         <input type="number" id="parentFolderId" name="parentFolderId" 
             value="<%- parentFolderId %>" required hidden>
