@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx --watch --env-file=.env src/app.ts",
-    "build": "prisma generate && tsc && copyfiles -u 1 \"src/views/**/*\" \"src/public/**/*\" dist/src",
+    "build": "prisma generate && tsc && tsc-alias && copyfiles -u 1 \"src/views/**/*\" \"src/public/**/*\" dist/src",
     "clean": "rm -rf dist",
     "start": "node ./dist/src/app.js",
     "type-check": "tsc --noEmit"
@@ -47,6 +47,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "prisma": "^7.5.0",
+    "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
