@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { getChildrenOfFolder, getRootFolderId, insertFolder, deleteFolder as deleteFolderDB, updateFolder, getChildrenOfFolderWithoutUser } from "../db/folder";
-import supabase from "../config/supabaseConfig";
-import { AppError } from "../error/error";
+import { getChildrenOfFolder, getRootFolderId, insertFolder, deleteFolder as deleteFolderDB, updateFolder, getChildrenOfFolderWithoutUser } from "../db/folder.js";
+import supabase from "../config/supabaseConfig.js";
+import { AppError } from "../error/error.js";
 
 export const getRootFolderChildren = async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user!.id;

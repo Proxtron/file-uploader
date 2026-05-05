@@ -1,4 +1,4 @@
-import { prisma } from "../../prisma/prisma";
+import { prisma } from "../../prisma/prisma.js";
 
 export const createRootFolder = async (userId: number) => {
     return await prisma.folder.create({

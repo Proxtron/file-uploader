@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express"
-import { addFile, deleteFile, getFileById } from "../db/file";
-import supabase from "../config/supabaseConfig";
+import { addFile, deleteFile, getFileById } from "../db/file.js";
+import supabase from "../config/supabaseConfig.js";
 import { randomUUID } from "crypto";
-import { AppError } from "../error/error";
+import { AppError } from "../error/error.js";
 
 const MAX_FILE_SIZE = 10 * 1000 * 1000; // 10MB
 

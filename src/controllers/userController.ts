@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { addUser } from "../db/user";
+import { addUser } from "../db/user.js";
 import { hash } from "bcrypt";
-import { createRootFolder } from "../db/folder";
+import { createRootFolder } from "../db/folder.js";
 
 export const getRegister = (req: Request, res: Response, next: NextFunction) => {
     res.render("register");
